@@ -187,7 +187,7 @@ function Currency() {
 
               <div className="currency__priceChange">
                 <h5>{`${quantity}`}.00 {!exchange ? (data && data.map(el => (values == el.currency.code && el.currency.name))):"United State Dollar"} =</h5>
-                <h1>{whole}<span className="faded-digits">{decimalPart && decimalPart}</span> US Dollars</h1>
+                <h1>{whole}<span className="faded-digits">{decimalPart ? decimalPart : "00"}</span> US Dollars</h1>
                  {
                     !exchange ?
                     <div>
