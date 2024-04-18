@@ -1,8 +1,12 @@
+import { useState } from 'react'
 import './App.css'
 import Currency from './components/Currency'
+import { qauntProps } from './type';
 
 function App() {
-
+  const [quant, setQuant] = useState<qauntProps>(Object);
+  const [changes, setChanges] = useState<boolean>(false);
+  const [val, setVal] = useState<number>(0);
   
 
   return (
@@ -34,11 +38,15 @@ function App() {
             </nav>
             </header>
             <div className="hero__title">
-              <h1>123 UZS to USD - Convert Uzbekistani Sums to US Dollars</h1>
+              {
+                !changes ?
+                <h1>{val} {quant.currency?.code} to USD - Convert {quant.currency?.name} to US Dollars</h1>:
+                <h1>{val} USD to {quant.currency?.code} - Convert US Dollars to {quant.currency?.name}</h1>
+              }
               <p>Xe Currency Converter</p>
             </div>
 
-            <Currency />
+            <Currency setQuant={setQuant} setChanges={setChanges} setVal={setVal}/>
           </div>
         </div>
      </div>

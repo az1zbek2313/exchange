@@ -3,7 +3,9 @@ import uz from "../../assets/image/uz.svg"
 import us from "../../assets/image/us.svg"
 import {useEffect, useState} from "react";
 import { useRef } from 'react'
+import { qauntProps } from '../../type';
 import data from "../../assets/currency-flags.json";
+import React, { FC } from 'react';
 
 type ConvertProps = {
     base: string,
@@ -14,8 +16,13 @@ type ConvertProps = {
     ms: number
 }
 
+type objProps = {
+    setChanges: React.Dispatch<React.SetStateAction<boolean>>;
+    setQuant: React.Dispatch<React.SetStateAction<qauntProps>>;
+    setVal: React.Dispatch<React.SetStateAction<number>>;
+}
 
-function Currency() {
+const Currency:FC<objProps> = ({setQuant, setChanges, setVal}) => {
     const [quantity, setQuantity] = useState<number>(localStorage.getItem("amount")?Number(localStorage.getItem("amount")):0);
     const [exchange, setExchange] = useState<boolean>(false);
     const [convert, setConvert] = useState<ConvertProps[] | any>(null);
@@ -51,12 +58,14 @@ function Currency() {
             const whole = Math.trunc(son) +'.' + qoldiq.toString().substring(2, 4);
             setDecimal(decimalPart);
             setWhole(whole);
+            setVal(inputValue);
         }
     }
     
 
     function handleExchange() {
         exchange ? setExchange(false) : setExchange(true);        
+        exchange ? setChanges(false) : setChanges(true);        
     }
 
     function handleChange1(e:  React.ChangeEvent<HTMLSelectElement>) {
@@ -77,7 +86,9 @@ function Currency() {
     })    
 
     
-    const symbole = data.find(el => el.currency?.code == values);
+    const symbole:qauntProps | undefined = data.find(el => el.currency?.code == values);
+    symbole && setQuant(symbole);
+    
     
     useEffect(() => {
     const son = !exchange ? Number(1/qiymat) * quantity : Number(qiymat) * quantity ; 
@@ -87,6 +98,7 @@ function Currency() {
     const whole = Math.trunc(son) +'.' + qoldiq.toString().substring(2, 4);
     setDecimal(decimalPart);
     setWhole(whole);
+    setVal(quantity);
     console.log(quantity);
 }, [quantity, exchange, qiymat]);
 
